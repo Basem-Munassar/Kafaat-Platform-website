@@ -18,7 +18,7 @@ class authController extends Controller
     {
         return view('admin.pages.auth.register');
     }
-    
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -32,7 +32,7 @@ class authController extends Controller
             // 'role' => 'required|string|in:admin,user',
         ]);
 
-        
+
         $user = User::create($validated);
 
         // Log in the user immediately after registration
@@ -90,5 +90,4 @@ class authController extends Controller
         Auth::logout();
         return redirect()->route('auth.login')->with('success', 'Logged out successfully');
     }
-
 }

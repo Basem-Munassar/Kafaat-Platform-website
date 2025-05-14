@@ -16,6 +16,6 @@ class dashboardController extends Controller
         $skillCount = Skill::count();
         $languageCount = Language::count();
 
-        return view('admin.dashboard', compact('projectCount','jobTitleCount','skillCount','languageCount'));
-    } 
+        return view('admin.dashboard', compact('projectCount', 'jobTitleCount', 'skillCount', 'languageCount'));
+    }
 }

@@ -24,8 +24,8 @@ Route::get('/', [homePageController::class, 'index'])->name('home.index');
 Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', [dashboardController::class, 'index'])->name('dashboard.index');
 
-     // Users Routes
-     Route::prefix('admin/users')->name('users.')->group(function () {
+    // Users Routes
+    Route::prefix('admin/users')->name('users.')->group(function () {
         Route::get('/', [usersController::class, 'index'])->name('index');
         Route::post('/store', [usersController::class, 'store'])->name('store');
         Route::get('/create', function () {
@@ -84,8 +84,6 @@ Route::middleware('auth')->group(function () {
             return view('admin.pages.add&Edit.addAndEditPost');
         })->name('create');
     });
-
-   
 })->middleware('auth')->name('redirectToLogin');
 
 Route::get('/login', function () {

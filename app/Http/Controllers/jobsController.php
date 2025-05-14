@@ -16,13 +16,11 @@ class jobsController extends Controller
 
     public function store(Request $request)
     {
-        $validated =$request->validate([
+        $validated = $request->validate([
             'user_id' => 'required|integer|exists:users,id',
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
-        ]); 
-        
-        
+        ]);
         $jobTitle = JobTitle::create($validated);
         // dd($jobTitle()); 
         return redirect()->route('jobsTitles.index')->with('success', 'Job created successfully');
