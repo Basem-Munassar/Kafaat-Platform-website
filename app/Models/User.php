@@ -21,6 +21,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
+        'location',
+        'bio',
+        'profile_image',
     ];
 
     /**
@@ -45,4 +49,39 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function jobTitles()
+    {
+        return $this->hasMany(JobTitle::class);
+    }
+
+    public function skills()
+    {
+        return $this->hasMany(Skill::class);
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
+
+    public function certifications()
+    {
+        return $this->hasMany(Certification::class);
+    }
+
+    public function blogPosts()
+    {
+        return $this->hasMany(BlogPost::class);
+    }
+
+    public function languages()
+    {
+        return $this->hasMany(Language::class);
+    }
+
+    public function socialLinks()
+    {
+        return $this->hasMany(SocialLink::class);
+    }
+
 }
