@@ -1,43 +1,59 @@
 @extends('admin.layout.masterApp')
-<!-- content -->
-<!-- breadcrumb -->
+
+@section('pageTitle', 'إدارة المشاريع')
+@section('pageDescription', 'كل المشاريع المضافة في النظام')
+
 @section('projects')
-<div class="c-grey text-center col-3 ">
-    <form action="{{ route('projects.create') }}" method="get">
-        @csrf
-        <button type="submit" class="btn flat f-first btn-block fnt-xxs ">Add New Project</button>
-    </form>
-</div>
-<br>
-<hr>
-
-<div class="row">
-    
-    @foreach($projects as $project)
-<div class="col col-xl-3 col-md-6 col-sm-12 p-2">
-<div class="card flat f-main mb-4">
-    <img class="card-img-top" src="{{ asset('storage/' . $project->image) }}" alt="Project Image">
-
-    <div class="card-body">
-        <h5 class="card-title">{{ $project->title }}</h5>
-        <p class="text-left">
-            used class: <br>
-            <span class="fnt-code c-primary">{{ $project->technologies }}</span>
-        </p>
+<div class="apage-head">
+    <div>
+        <h4 class="apage-title"><i class="fas fa-diagram-project mr-2"></i>المشاريع</h4>
+        <span class="apage-count">{{ $projects->count() }} مشروع</span>
     </div>
-
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">Date: {{ $project->date }}</li>
-        <li class="list-group-item">Description: {{ $project->description }}</li>
-    </ul>
-
-    <div class="card-body">
-        <div class="c-grey text-center">
-            <a href="{{ route('projects.edit', $project->id) }}" class="btn flat f-third btn-block fnt-xxs mb-2">Edit</a>
-            <a href="{{ route('projects.delete', $project->id) }}" class="btn flat f-forth btn-block fnt-xxs">Delete</a>
-        </div>    </div>
-</div>
+    <a href="{{ route('admin.projects.create') }}" class="abtn-add"><i class="fas fa-circle-plus"></i> إضافة مشروع</a>
 </div>
 
-@endforeach
+<div class="apanel">
+    <div class="table-responsive">
+        <table class="atable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>الصورة</th>
+                    <th>العنوان</th>
+                    <th>التقنيات</th>
+                    <th>الرابط</th>
+                    <th>التاريخ</th>
+                    <th>الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($projects as $project)
+                    <tr>
+                        <td>{{ $project->id }}</td>
+                        <td><img class="aimg" src="{{ $project->image ? asset('storage/' . $project->image) : asset('admin/img/user-profile.jpg') }}" alt=""></td>
+                        <td style="font-weight:bold;color:#2d114e;">{{ $project->title }}</td>
+                        <td>{{ \Illuminate\Support\Str::limit($project->technologies, 40) ?: '—' }}</td>
+                        <td>
+                            @if ($project->link)
+                                <a href="{{ $project->link }}" target="_blank" style="color:#892CDC;"><i class="fas fa-link"></i> زيارة</a>
+                            @else <span class="text-muted">—</span> @endif
+                        </td>
+                        <td>{{ $project->date ?? '—' }}</td>
+                        <td>
+                            <div class="d-flex" style="gap:.4rem;">
+                                <a href="{{ route('admin.projects.edit', $project->id) }}" class="abtn-edit" title="تعديل"><i class="fas fa-pen"></i></a>
+                                <form action="{{ route('admin.projects.delete', $project->id) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذا المشروع؟')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="abtn-del" title="حذف"><i class="fas fa-trash"></i></button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                @empty
+                    <tr><td colspan="7"><div class="aempty"><i class="fas fa-diagram-project"></i><p class="mt-2">لا توجد مشاريع.</p></div></td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
 @endsection

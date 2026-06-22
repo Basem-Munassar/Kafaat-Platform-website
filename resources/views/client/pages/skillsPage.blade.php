@@ -1,120 +1,69 @@
 @extends('client.layout.clientMasterApp')
 
 @section('skills')
-    <!--================= start skills =============-->
-    <section class="skills" id="skills">
+    <!--================= start featured =============-->
+    <section class="featured" id="featured">
         <div class="heading">
-            <h1>مهراتي</h1>
-            <span>مهراتي المفضلة</span>
+            <h1>أبرز الكفاءات</h1>
+            <span>نخبة متميزة من أصحاب الخبرات</span>
         </div>
 
-        <div class="skills-container">
-            <div class="skills-content">
-                <!-- heading-lift -->
-                <div class="heading-lift">
-                    <h3 class="skills-title">
-                        <i class="bx bx-code-curly"> مطور الواجهة الأمامية </i>
-                    </h3>
+        <div class="featured-grid">
+            {{-- اختر أبرز 3 كفاءات (يمكنك تغيير المعيار من الكنترولر عبر $featuredUsers) --}}
+            @foreach ($featuredUsers ?? $users->take(3) as $user)
+                <div class="featured-card">
+                    <div class="featured-card__image">
+                        <img src="{{ $user->profile_image ? asset('storage/' . $user->profile_image) : asset('/client/img/profile.png') }}" alt="{{ $user->name }}">
+                        <div class="featured-card__badge">🌟 خبير</div>
+                    </div>
+                    <div class="featured-card__content">
+                        <h3 class="featured-card__name">{{ $user->name }}</h3>
+                        <p class="featured-card__specialty">{{ $user->specialty ?? 'مطور واجهات أمامية' }}</p>
+                        <p class="featured-card__bio">{{ \Illuminate\Support\Str::limit($user->bio ?? 'خبرة واسعة في تصميم وتطوير تجارب المستخدم.', 85) }}</p>
+                        <div class="featured-card__skills">
+                            <span>HTML</span><span>CSS</span><span>JavaScript</span>
+                        </div>
+                        <a href="{{ route('kafaa.show', $user->id) }}" class="btn featured-card__btn">عرض الملف الشخصي</a>
+                    </div>
                 </div>
+            @endforeach
+        </div>
+    </section>
 
-                <!-- skills info html -->
-                <div class="skills-info">
-                    <div class="skills-data">
-                        <div class="skills-blob">
-                            <img src="{{ asset('/client/img/html-1.svg') }}" alt="">
+    <!--================= all profiles =============-->
+    <section class="profiles" id="profiles">
+        <div class="heading text-center mb-5">
+            <h1>السير الذاتية المتاحة</h1>
+            <span>تعرف على أفضل المتخصصين واطلع على خبراتهم بسرعة</span>
+        </div>
+
+        <div class="profiles-grid">
+            @foreach ($users as $user)
+                <div class="profile-card">
+                    <div class="profile-card__head">
+                        <div class="profile-card__avatar">
+                            <img src="{{ $user->profile_image ? asset('storage/' . $user->profile_image) : asset('/client/img/profile.png') }}" alt="{{ $user->name }}">
                         </div>
-                        <h3 class="skills-name">HTML</h3>
-                        <span class="skills-subtitle">متقدم</span>
-                    </div>
-                    <!-- skills info css -->
-                    <div class="skills-data">
-                        <div class="skills-blob">
-                            <img src="{{ asset('/client/img/css-3.svg') }}" alt="">
-                        </div>
-                        <h3 class="skills-name">CSS</h3>
-                        <span class="skills-subtitle">متوسط</span>
-                    </div>
-                    <!-- skills info javascript-->
-                    <div class="skills-data">
-                        <div class="skills-blob">
-                            <img src="{{ asset('/client/img/logo-javascript.svg') }}" alt="">
-                        </div>
-                        <h3 class="skills-name">js</h3>
-                        <span class="skills-subtitle">اساسيات</span>
+                        <h5 class="profile-card__name">{{ $user->name }}</h5>
+                        <p class="profile-card__bio">{{ $user->bio ? \Illuminate\Support\Str::limit($user->bio, 100, '...') : 'مطور واجهات أمامية بخبرة عالية في تصميم واجهات المستخدم.' }}</p>
                     </div>
 
-                </div>
+                    <div class="profile-card__info">
+                        <div class="profile-card__item">
+                            <span>الإيميل</span>
+                            <strong>{{ $user->email }}</strong>
+                        </div>
+                        <div class="profile-card__item">
+                            <span>الموقع</span>
+                            <strong>{{ $user->location ?: 'غير محدد' }}</strong>
+                        </div>
+                    </div>
 
-                <div class="skills-info">
-                    <!-- skills info bootstrap-->
-                    <div class="skills-data">
-                        <div class="skills-blob">
-                            <img src="{{ asset('/client/img/bootstrap-4.svg') }}" alt="">
-                        </div>
-                        <h3 class="skills-name">bootstrap</h3>
-                        <span class="skills-subtitle">عادي</span>
-                    </div>
-                    <div class="skills-data ">
-                        <div class="skills-blob">
-                            <img src="{{ asset('/client/img/git-icon.svg') }}" alt="">
-                        </div>
-                        <h3 class="skills-name">Git</h3>
-                        <span class="skills-subtitle">متوسط</span>
+                    <div class="profile-card__button">
+                        <a href="{{ route('kafaa.show', $user->id) }}" class="btn">عرض الملف الشخصي</a>
                     </div>
                 </div>
-            </div>
-
-            <div class="skills-content">
-                <!-- heading-lift -->
-                <div class="heading-lift">
-                    <h3 class="skills-title">
-                        <i class='bx bx-palette'></i> مصمم الويب
-                    </h3>
-                </div>
-                <!-- skills info adobe-xd -->
-                <div class="skills-info">
-                    <div class="skills-data">
-                        <div class="skills-blob">
-                            <img src="{{ asset('/client/img/adobe-xd-1.svg') }}" alt="">
-                        </div>
-                        <h3 class="skills-name">adobe</h3>
-                        <span class="skills-subtitle">متوسط</span>
-                    </div>
-                    <!-- skills info invision-->
-                    <div class="skills-data">
-                        <div class="skills-blob">
-                            <img src="{{ asset('/client/img/invision.svg') }}" alt="">
-                        </div>
-                        <h3 class="skills-name">invision</h3>
-                        <span class="skills-subtitle">اساسيات</span>
-                    </div>
-                    <!-- skills info canva-->
-                    <div class="skills-data">
-                        <div class="skills-blob">
-                            <img src="{{ asset('/client/img/canva-1.svg') }}" alt="">
-                        </div>
-                        <h3 class="skills-name">canva</h3>
-                        <span class="skills-subtitle">متقدم</span>
-                    </div>
-                </div>
-
-                <div class="skills-info">
-                    <div class="skills-data">
-                        <div class="skills-blob">
-                            <img src="{{ asset('/client/img/adobe-photoshop-2.svg') }}" alt="">
-                        </div>
-                        <h3 class="skills-name">photoshop</h3>
-                        <span class="skills-subtitle">متوسط</span>
-                    </div>
-                    <div class="skills-data">
-                        <div class="skills-blob">
-                            <img src="{{ asset('/client/img/figma-1.svg') }}" alt="">
-                        </div>
-                        <h3 class="skills-name">figma</h3>
-                        <span class="skills-subtitle">متقدم</span>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </section>
     <!--================ end skills ===============-->

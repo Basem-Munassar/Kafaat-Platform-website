@@ -1,37 +1,53 @@
 @extends('admin.layout.masterApp')
-<!-- content -->
-<!-- breadcrumb -->
+
+@section('pageTitle', 'إدارة المهارات')
+@section('pageDescription', 'كل المهارات المسجّلة في النظام')
+
 @section('skills')
-<div class="c-grey text-center col-3 ">
-    <form action="{{ route('skills.create') }}" method="get">
-        @csrf
-        <button type="submit" class="btn flat f-first btn-block fnt-xxs ">Add New Skill</button>
-    </form>
-</div>
-<br>
-<hr>
-
-@foreach($skills as $skill)
-    <div class="row">
-        <div class="col-xl-6 p-2">
-            <div class="card flat c-white f-forth text-center">
-                <div class="card-header">
-                    Skill
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">{{ $skill->name }}</h5>
-                    <p class="card-text">{{$skill->level}}</p>
-                    <p class="card-text">{{$skill->category}}</p>
-                    <a href="#" class="btn text-center f-white">more Information</a>
-                </div>
-                <div class="card-footer text-muted c-white">
-                    {{ $skill->created_at->diffForHumans() }}
-                </div>
-            </div>
-        </div>
-        
+<div class="apage-head">
+    <div>
+        <h4 class="apage-title"><i class="fas fa-bolt mr-2"></i>المهارات</h4>
+        <span class="apage-count">{{ $skills->count() }} مهارة</span>
     </div>
+    <a href="{{ route('admin.skills.create') }}" class="abtn-add"><i class="fas fa-circle-plus"></i> إضافة مهارة</a>
+</div>
 
-@endforeach 
-
+<div class="apanel">
+    <div class="table-responsive">
+        <table class="atable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>المهارة</th>
+                    <th>المستوى</th>
+                    <th>التصنيف</th>
+                    <th>صاحبها</th>
+                    <th>الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($skills as $skill)
+                    <tr>
+                        <td>{{ $skill->id }}</td>
+                        <td style="font-weight:bold;color:#2d114e;">{{ $skill->name }}</td>
+                        <td><span class="atag atag-admin">{{ $skill->level }}</span></td>
+                        <td>{{ $skill->category ?: '—' }}</td>
+                        <td>{{ optional(\App\Models\User::find($skill->user_id))->name ?? '#' . $skill->user_id }}</td>
+                        <td>
+                            <div class="d-flex" style="gap:.4rem;">
+                                <a href="{{ route('admin.skills.edit', $skill->id) }}" class="abtn-edit" title="تعديل"><i class="fas fa-pen"></i></a>
+                                <form action="{{ route('admin.skills.delete', $skill->id) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من حذف هذه المهارة؟')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="abtn-del" title="حذف"><i class="fas fa-trash"></i></button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                @empty
+                    <tr><td colspan="6"><div class="aempty"><i class="fas fa-bolt"></i><p class="mt-2">لا توجد مهارات.</p></div></td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
 @endsection

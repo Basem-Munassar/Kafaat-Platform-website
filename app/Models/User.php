@@ -24,7 +24,11 @@ class User extends Authenticatable
         'phone',
         'location',
         'bio',
+        'specialty',
         'profile_image',
+        'role',
+        'account_type',
+        'is_available',
     ];
 
     /**
@@ -51,37 +55,52 @@ class User extends Authenticatable
     }
     public function jobTitles()
     {
-        return $this->hasMany(JobTitle::class);
+        return $this->hasMany(JobTitle::class, 'user_id');
     }
 
     public function skills()
     {
-        return $this->hasMany(Skill::class);
+        return $this->hasMany(Skill::class, 'user_id');
     }
 
     public function projects()
     {
-        return $this->hasMany(Project::class);
+        return $this->hasMany(Project::class, 'user_id');
     }
 
     public function certifications()
     {
-        return $this->hasMany(Certification::class);
+        return $this->hasMany(Certification::class, 'user_id');
     }
 
     public function blogPosts()
     {
-        return $this->hasMany(BlogPost::class);
+        return $this->hasMany(BlogPost::class, 'user_id');
     }
 
     public function languages()
     {
-        return $this->hasMany(Language::class);
+        return $this->hasMany(Language::class, 'user_id');
     }
 
     public function socialLinks()
     {
-        return $this->hasMany(SocialLink::class);
+        return $this->hasMany(SocialLink::class, 'user_id');
+    }
+
+    public function experiences()
+    {
+        return $this->hasMany(Experience::class, 'user_id');
+    }
+
+    public function services()
+    {
+        return $this->hasMany(Service::class, 'user_id');
+    }
+
+    public function profileVisits()
+    {
+        return $this->hasMany(ProfileVisit::class, 'profile_user_id');
     }
 
 }

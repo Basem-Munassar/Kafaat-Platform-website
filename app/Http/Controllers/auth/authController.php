@@ -2,57 +2,48 @@
 
 namespace App\Http\Controllers\auth;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controller;
 
 class authController extends Controller
 {
     public function login()
     {
-        return view('admin.pages.auth.login');
+        return view('kafaa.pages.auth.login');
     }
 
     public function register()
     {
-        return view('admin.pages.auth.register');
+        return view('kafaa.pages.auth.register');
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-            // 'role' => 'required|string|in:admin,user',
+            'account_type' => 'required|string|in:user,kafaa',
             'phone' => 'nullable|string|max:20',
             'location' => 'nullable|string|max:255',
-            // 'role' => 'required|string|in:admin,user',
         ]);
 
-
-        $user = User::create($validated);
-
-        // Log in the user immediately after registration
-        // Auth::loginUsingId($user->id);
-        session([
-            'user_id' => $user->id,
-            'user_name' => $user->name,
-            'user_email' => $user->email,
-            'user_image' => $user->profile_image,
-            'user_phone' => $user->phone,
-            'user_location' => $user->location,
-            'user_role' => $user->role,
-
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => bcrypt($validated['password']),
+            'account_type' => $validated['account_type'],
+            'phone' => $validated['phone'] ?? null,
+            'location' => $validated['location'] ?? null,
+            'role' => 'user', // default role
+            'is_available' => true,
         ]);
 
-        if ($user) {
-            return redirect()->route('dashboard.index')->with('success', 'User registered and logged in successfully');
-        } else {
-            return redirect()->back()->with('error', 'User registration failed');
-        }
+        Auth::login($user);
+
+        return $this->redirectBasedOnRole($user);
     }
 
     public function checkUser(Request $request)
@@ -64,20 +55,8 @@ class authController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-
-            // Store user data in the session
             $user = Auth::user();
-            session([
-                'user_id' => $user->id,
-                'user_name' => $user->name,
-                'user_email' => $user->email,
-                'user_image' => $user->profile_image,
-                'user_phone' => $user->phone,
-                'user_location' => $user->location,
-                'user_role' => $user->role,
-            ]);
-
-            return redirect()->route('dashboard.index')->with('success', 'Logged in successfully');
+            return $this->redirectBasedOnRole($user);
         }
 
         return back()->withErrors([
@@ -85,9 +64,27 @@ class authController extends Controller
         ])->onlyInput('email');
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
-        return redirect()->route('auth.login')->with('success', 'Logged out successfully');
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('home.index')->with('success', 'Logged out successfully');
+    }
+
+    private function redirectBasedOnRole($user)
+    {
+        // Consider both role and account_type: a kafaa account keeps role 'user',
+        // so relying on role alone would never route it to the kafaa dashboard.
+        $roles = array_filter([$user->role, $user->account_type]);
+
+        if (in_array('admin', $roles) || in_array('super admin', $roles)) {
+            return redirect()->route('admin.dashboard.index')->with('success', 'Logged in as Admin');
+        } elseif (array_intersect($roles, ['employee', 'kafaa'])) {
+            return redirect()->route('kafaa.dashboard.index')->with('success', 'Logged in as Kafaa');
+        } else {
+            return redirect()->route('home.index')->with('success', 'Logged in successfully');
+        }
     }
 }

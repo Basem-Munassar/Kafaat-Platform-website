@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Language;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controller;
 
 class languagesController extends Controller
 {
@@ -24,12 +26,12 @@ class languagesController extends Controller
         ]);         
        
         $languages = Language::create($validated);
-        return redirect()->route('languages.index')->with('success', 'Language created successfully');
+        return redirect()->route('admin.languages.index')->with('success', 'Language created successfully');
     }
-    public function edit($id)
+    public function edit(int $id)
     {
         $language = Language::findOrFail($id);
-        return view('admin.pages.add&Edit.addandEditLanguage', compact('language'));
+        return view('admin.pages.add&Edit.addAndEditLanguage', compact('language'));
     }
     public function update(Request $request)
     {
@@ -43,13 +45,63 @@ class languagesController extends Controller
         ]);         
        
         $language->update($validated);
-        return redirect()->route('languages.index')->with('success', 'Language updated successfully');
+        return redirect()->route('admin.languages.index')->with('success', 'Language updated successfully');
     }
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $language = Language::findOrFail($id);
         $language->delete();
-        return redirect()->route('languages.index')->with('success', 'Language deleted successfully');
+        return redirect()->route('admin.languages.index')->with('success', 'Language deleted successfully');
     }
-    
+
+    // Kafaa (Expert) Panel Methods
+    public function kafaaIndex()
+    {
+        $languages = Language::where('user_id', Auth::id())->get();
+        return view('kafaa.pages.languages', compact('languages'));
+    }
+
+    public function kafaaCreate()
+    {
+        return view('kafaa.pages.add&Edit.addAndEditLanguage');
+    }
+
+    public function kafaaStore(Request $request)
+    {
+        $validated = $request->validate([
+            'language' => 'required|string|max:255',
+            'level' => 'required|string|max:100',
+        ]);
+
+        $validated['user_id'] = Auth::id();
+
+        Language::create($validated);
+        return redirect()->route('kafaa.languages.index')->with('success', 'تم إضافة اللغة بنجاح');
+    }
+
+    public function kafaaEdit(int $id)
+    {
+        $language = Language::where('user_id', Auth::id())->findOrFail($id);
+        return view('kafaa.pages.add&Edit.addAndEditLanguage', compact('language'));
+    }
+
+    public function kafaaUpdate(Request $request, int $id)
+    {
+        $language = Language::where('user_id', Auth::id())->findOrFail($id);
+
+        $validated = $request->validate([
+            'language' => 'required|string|max:255',
+            'level' => 'required|string|max:100',
+        ]);
+
+        $language->update($validated);
+        return redirect()->route('kafaa.languages.index')->with('success', 'تم تحديث اللغة بنجاح');
+    }
+
+    public function kafaaDestroy(int $id)
+    {
+        $language = Language::where('user_id', Auth::id())->findOrFail($id);
+        $language->delete();
+        return redirect()->back()->with('success', 'تم حذف اللغة بنجاح');
+    }
 }

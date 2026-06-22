@@ -2,24 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\JobTitle;
-use App\Models\Skill;
+use App\Models\Kafaa;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class homePageController extends Controller
 {
-    public function index (){
-        $skills = Skill::all();
-        // $skillCount = Skill::count();
-       $jobTitles = JobTitle::all();
-        // $jobTitleCount = JobTitle::count();
-        // $projects = Project::all();
-        // $projectCount = Project::count();
-        // $experiences = Experience::all();
-        // $experienceCount = Experience::count();
-        // $educations = Education::all();
-        // $educationCount = Education::count();
-        // $users = User::all();
-        return view('client.pages.homePage');
+    public function index()
+    {
+        // Only fetch available kafaa profiles
+        $users = Kafaa::where('is_available', true)->get();
+
+        return view('client.pages.homePage', compact('users'));
     }
 }

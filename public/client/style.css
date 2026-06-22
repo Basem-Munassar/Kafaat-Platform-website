@@ -370,6 +370,113 @@ transform: translateY(-3px); /* ترتفع 3 بكسل */
     color: var(--title-color);
 }
 
+/*=============== profiles ===============*/
+.profiles {
+    padding: 4rem 0;
+}
+
+.profiles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    align-items: stretch;
+}
+
+.profile-card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(234, 219, 255, 0.9));
+    border: 1px solid rgba(137, 44, 220, 0.14);
+    border-radius: 2rem;
+    box-shadow: 0 20px 45px rgba(137, 44, 220, 0.12);
+    overflow: hidden;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 28px 55px rgba(137, 44, 220, 0.18);
+}
+
+.profile-card__head {
+    background: linear-gradient(180deg, rgba(137, 44, 220, 0.08), rgba(188, 111, 241, 0.06));
+    padding: 2rem 1.5rem 1.25rem;
+    text-align: center;
+}
+
+.profile-card__avatar {
+    width: 132px;
+    height: 132px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    border: 5px solid rgba(255, 255, 255, 0.85);
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 18px 30px rgba(137, 44, 220, 0.12);
+}
+
+.profile-card__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-card__name {
+    margin-bottom: 0.6rem;
+    font-size: 1.1rem;
+    color: var(--title-color);
+    letter-spacing: 0.01em;
+}
+
+.profile-card__bio {
+    font-size: 0.95rem;
+    color: #5d527f;
+    line-height: 1.75;
+    margin: 0 auto;
+    max-width: 18rem;
+}
+
+.profile-card__info {
+    padding: 1.5rem 1.5rem 0;
+    flex-grow: 1;
+}
+
+.profile-card__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(137, 44, 220, 0.08);
+    border-radius: 1.1rem;
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.9rem;
+    color: var(--title-color);
+    font-size: 0.96rem;
+}
+
+.profile-card__item span {
+    opacity: 0.85;
+}
+
+.profile-card__button {
+    padding: 1.5rem 1.5rem 1.75rem;
+}
+
+.profile-card__button .btn {
+    width: 100%;
+    background: var(--first-color);
+    color: var(--white);
+    border: none;
+    border-radius: 1rem;
+    padding: 0.95rem 1rem;
+    font-size: 0.95rem;
+}
+
+.profile-card__button .btn:hover {
+    background: var(--first-color-light);
+    color: var(--white);
+    transform: translateY(-3px);
+}
+
 /*=============== ABOUT ===============*/
 
 .about-container {
@@ -609,39 +716,232 @@ transform: translateY(-3px); /* ترتفع 3 بكسل */
 
 .reviews-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    align-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    align-items: stretch;
     gap: 1rem;
 }
 
 .reviews-container .reviews-card {
     text-align: center;
-    padding: 15px;
+    padding: 2rem 1.5rem;
     background: #fff;
-    border-radius: 1.2rem 0 1.2rem 0;
-    cursor: pointer;
-    transition: all .5s ease;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(137, 44, 220, 0.12);
+    box-shadow: 0 20px 35px rgba(137, 44, 220, 0.08);
+    cursor: default;
+    transition: all .35s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1rem;
+}
+
+.reviews-container .reviews-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 26px 45px rgba(137, 44, 220, 0.14);
 }
 
 .reviews-container .reviews-card h2 {
     font-size: var(--h3-font-size);
-}
-
-.reviews-container .reviews-card:hover {
-    transform: translateY(-6px); /* ترتفع 3 بكسل */
+    color: var(--title-color);
 }
 
 .reviews-container .reviews-card img {
-    width: 70px;
-    height: 70px;
+    width: 90px;
+    height: 90px;
     border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    border: 4px solid rgba(188, 111, 241, 0.18);
+}
+
+.reviews-card .star {
+    display: inline-flex;
+    gap: 0.25rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.reviews-card .star .bx {
+    color: var(--first-color);
+    font-size: 1.2rem;
+}
+
+.review-form-container {
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 1.5rem;
+    border: 1px solid rgba(137, 44, 220, 0.14);
+    box-shadow: 0 20px 40px rgba(137, 44, 220, 0.08);
+    margin-top: 3rem;
+}
+
+.review-form-container .heading {
+    margin-bottom: 1.5rem;
+}
+
+.review-form {
+    display: grid;
+    gap: 1.25rem;
+}
+
+.review-form .form-group {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.review-form .form-control,
+.review-form .form-control-file,
+.review-form textarea {
+    width: 100%;
+    padding: 1rem 1.2rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(137, 44, 220, 0.18);
+    outline: none;
+    background: #faf7ff;
+    font-size: 1rem;
+}
+
+.review-form .form-control:focus,
+.review-form textarea:focus {
+    border-color: var(--first-color);
+    box-shadow: 0 0 0 4px rgba(188, 111, 241, 0.12);
+}
+
+.star-rating {
+    display: inline-flex;
+    gap: 0.2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 2rem;
+    color: rgba(0, 0, 0, 0.16);
+    cursor: pointer;
+    transition: color 0.25s ease;
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: var(--first-color);
+}
+
+.alert {
+    border-radius: 1rem;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.alert-success {
+    background: rgba(20, 160, 60, 0.12);
+    color: #0f5132;
+    border: 1px solid rgba(20, 160, 60, 0.2);
+}
+
+.alert-danger {
+    background: rgba(220, 53, 69, 0.12);
+    color: #842029;
+    border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+.featured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.featured-card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 232, 255, 0.9));
+    border: 1px solid rgba(137, 44, 220, 0.16);
+    border-radius: 1.8rem;
+    overflow: hidden;
+    box-shadow: 0 24px 40px rgba(137, 44, 220, 0.1);
+    transition: transform .35s ease, box-shadow .35s ease;
+}
+
+.featured-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 30px 55px rgba(137, 44, 220, 0.16);
+}
+
+.featured-card__image {
+    position: relative;
+    overflow: hidden;
+}
+
+.featured-card__image img {
+    width: 100%;
+    height: 260px;
     object-fit: cover;
     object-position: center;
 }
 
-.reviews-card .star .bx{
+.featured-card__badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--first-color);
+    color: #fff;
+    padding: 0.6rem 0.95rem;
+    border-radius: 1rem;
+    font-size: 0.9rem;
+    box-shadow: 0 12px 20px rgba(137, 44, 220, 0.18);
+}
+
+.featured-card__content {
+    padding: 1.6rem;
+}
+
+.featured-card__name {
+    margin-bottom: 0.35rem;
+    font-size: 1.25rem;
+    color: var(--title-color);
+}
+
+.featured-card__specialty {
     color: var(--first-color);
-    margin: .5rem 0 1rem;
+    margin-bottom: 1rem;
+}
+
+.featured-card__bio {
+    color: #5d527f;
+    line-height: 1.75;
+    margin-bottom: 1.2rem;
+}
+
+.featured-card__skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.featured-card__skills span {
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    background: rgba(137, 44, 220, 0.08);
+    color: var(--first-color);
+    font-size: 0.9rem;
+}
+
+.featured-card__btn {
+    display: inline-block;
+    background: var(--first-color);
+    color: #fff;
+    border-radius: 1rem;
+    padding: 0.9rem 1.6rem;
+}
+
+.featured-card__btn:hover {
+    background: var(--first-color-light);
 }
 
 /* = = = = = = == = = = = subscribe = = = == = = = ==  == ==  */
@@ -1039,3 +1339,319 @@ display: none;
     --gradient:linear-gradient(to top right, hsl(42, 100%, 50%),hsl(42, 100%, 83%));
 
     }
+
+    /* تعديلات اضافية  */
+    .home-img .brand-logo {
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0d6efd, #00c4ff);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-family: 'Cairo', sans-serif;
+    box-shadow: 0 12px 30px rgba(13, 110, 253, 0.25);
+    transition: transform 0.3s ease;
+}
+
+.home-img .brand-logo:hover {
+    transform: scale(1.05);
+}
+
+.brand-name {
+    font-size: 3.2rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 2px;
+}
+
+.brand-tagline {
+    font-size: 1rem;
+    margin-top: 6px;
+    opacity: 0.9;
+    font-weight: 300;
+}
+
+/*  */
+.developer-credit {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 0.95rem;
+    color: #555;
+    background: #f8f9fa;
+    padding: 12px 20px;
+    border-radius: 8px;
+}
+.developer-credit strong {
+    color: #0d6efd;
+}
+
+/*  */
+/* ===== أبرز الكفاءات ===== */
+.featured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.featured-card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.featured-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(13, 110, 253, 0.15);
+}
+
+.featured-card__image {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    background: linear-gradient(135deg, #0d6efd, #6610f2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.featured-card__image img {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #fff;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    background: #fff;
+}
+
+.featured-card__badge {
+    position: absolute;
+    bottom: 12px;
+    right: 16px;
+    background: #ffc107;
+    color: #000;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.featured-card__content {
+    padding: 1.5rem 1.2rem 1.8rem;
+    flex: 1;
+}
+
+.featured-card__name {
+    font-size: 1.4rem;
+    margin: 0.3rem 0 0.2rem;
+    color: #1e1e2f;
+}
+
+.featured-card__specialty {
+    color: #0d6efd;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+}
+
+.featured-card__bio {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.featured-card__skills {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.2rem;
+}
+
+.featured-card__skills span {
+    background: #f0f4ff;
+    color: #0d6efd;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.featured-card__btn {
+    background: #0d6efd;
+    color: #fff;
+    padding: 0.6rem 1.8rem;
+    border-radius: 25px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.3s;
+}
+
+.featured-card__btn:hover {
+    background: #0b5ed7;
+}   
+
+/* تنسيق نموذج إضافة المراجعة */
+.review-form-container {
+    max-width: 700px;
+    margin: 4rem auto 2rem;
+    background: #f9fafc;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+}
+.review-form .form-group {
+    margin-bottom: 1.5rem;
+}
+.review-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #1e1e2f;
+}
+.review-form .form-control,
+.review-form .form-control-file {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-family: inherit;
+}
+/* تقييم النجوم */
+.star-rating {
+    direction: rtl;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.3rem;
+    font-size: 2rem;
+}
+.star-rating input[type="radio"] {
+    display: none;
+}
+.star-rating label {
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #ffc107;
+}
+/* تنبيه النجاح */
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+/* ===== أزرار المصادقة في الهيدر ===== */
+.header-auth {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-right: auto; /* يدفع الأزرار لليسار في حال كان الهيدر flex row */
+    padding-left: 2rem;
+}
+
+.btn-auth {
+    padding: 0.5rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: 0.3s;
+    border: 2px solid transparent;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.btn-login {
+    background: transparent;
+    border-color: var(--primary-color, #0d6efd);
+    color: var(--primary-color, #0d6efd);
+}
+.btn-login:hover {
+    background: var(--primary-color, #0d6efd);
+    color: #fff;
+}
+
+.btn-register {
+    background: var(--primary-color, #0d6efd);
+    color: #fff;
+    border-color: var(--primary-color, #0d6efd);
+}
+.btn-register:hover {
+    background: transparent;
+    color: var(--primary-color, #0d6efd);
+}
+
+.btn-logout {
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+.btn-logout:hover {
+    background: #bb2d3b;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-name {
+    font-weight: 600;
+    color: var(--text-color, #333);
+    font-size: 0.95rem;
+}
+
+/* زر لوحة التحكم */
+.btn-dashboard {
+    background: #28a745; /* لون أخضر مميز */
+    color: #fff;
+    border: 2px solid #28a745;
+    padding: 0.5rem 1.4rem;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.3s;
+}
+.btn-dashboard:hover {
+    background: transparent;
+    color: #28a745;
+    border-color: #28a745;
+}
+.btn-dashboard i {
+    font-size: 1.2rem;
+}
+
+/* تحسين تنسيق user-menu ليتضمن عدة عناصر */
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}

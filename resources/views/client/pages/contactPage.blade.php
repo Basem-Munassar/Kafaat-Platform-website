@@ -11,7 +11,7 @@
             <div class="contact-card">
                 <div class="contact-content" data-reveal="left">
                     <div class="card-icon">
-                        <img src="{{ asset('/client/img/icon-5.svg') }}" width="44" height="44" loading="lazy"
+                        <img src="{{ asset('client/img/icon-5.svg') }}" width="44" height="44" loading="lazy"
                             alt="envelop icon">
                     </div>
                     <h2 class="h2 section-title">إذا أعجبك ما تراه ، فلنعمل معًا.</h2>
@@ -34,13 +34,28 @@
                         </div>
                     </div>
                 </div>
-                <form action="" class="contact-form" data-reveal="right">
-                    <div class="input-wrapper">
-                        <input type="text" name="posterName" placeholder="الاسم *" required class="input-field">
-                        <input type="email" name="posterEmail" placeholder="الاميل *" required class="input-field">
+                @if(session('contact_success'))
+                    <div class="alert alert-success">{{ session('contact_success') }}</div>
+                @endif
+
+                @if($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
-                    <input type="text" name="content" placeholder="الموضوع *" required class="input-field-2">
-                    <textarea name="message" placeholder="الرسالة *" required class="input-field"></textarea>
+                @endif
+
+                <form action="{{ route('contact.store') }}" method="POST" class="contact-form" data-reveal="right">
+                    @csrf
+                    <div class="input-wrapper">
+                        <input type="text" name="name" placeholder="الاسم *" required class="input-field" value="{{ old('name') }}">
+                        <input type="email" name="email" placeholder="الاميل *" required class="input-field" value="{{ old('email') }}">
+                    </div>
+                    <input type="text" name="subject" placeholder="الموضوع *" required class="input-field-2" value="{{ old('subject') }}">
+                    <textarea name="message" placeholder="الرسالة *" required class="input-field">{{ old('message') }}</textarea>
                     <button type="submit" class="btn btn-secondary">ارسل الرسالة</button>
                 </form>
             </div>

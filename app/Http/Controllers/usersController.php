@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class usersController extends Controller
 {
@@ -32,27 +33,27 @@ class usersController extends Controller
             $validated['profile_image'] = $imagePath;
         }
         $users = User::create($validated);
-        return redirect()->route('users.index')->with('success', 'User added successfully');
+        return redirect()->route('admin.users.index')->with('success', 'User added successfully');
     }
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $user = User::findOrFail($id);
         $user->delete();
         return redirect()->back()->with('success', 'User deleted successfully');
     }
-    // public function show($id)
+    // public function show(int $id)
     // {
     //     $user = User::findOrFail($id);
     //     return view('admin.pages.userProfile', compact('user'));
     // }
     
-    public function edit($id)
+    public function edit(int $id)
     {
         $user = User::findOrFail($id);
         return view('admin.pages.add&Edit.addandEditUser', compact('user'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
         $user = User::findOrFail($id);
         $validated = $request->validate([
@@ -71,6 +72,6 @@ class usersController extends Controller
         }
 
         $user->update($validated);
-        return redirect()->route('users.index')->with('success', 'User updated successfully');
+        return redirect()->route('admin.users.index')->with('success', 'User updated successfully');
     }
 }

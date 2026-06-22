@@ -1,41 +1,51 @@
 @extends('admin.layout.masterApp')
-<!-- content -->
-<!-- breadcrumb -->
+
+@section('pageTitle', 'إدارة المسميات الوظيفية')
+@section('pageDescription', 'كل المسميات الوظيفية في النظام')
+
 @section('jobsTitle')
-<div class="c-grey text-center col-3 ">
-    <form action="{{ route('jobsTitles.create') }}" method="get">
-        @csrf
-        <button type="submit" class="btn flat f-first btn-block fnt-xxs ">Add New Job title</button>
-    </form>
+<div class="apage-head">
+    <div>
+        <h4 class="apage-title"><i class="fas fa-briefcase mr-2"></i>المسميات الوظيفية</h4>
+        <span class="apage-count">{{ $jobTitles->count() }} مسمى</span>
+    </div>
+    <a href="{{ route('admin.jobsTitle.create') }}" class="abtn-add"><i class="fas fa-circle-plus"></i> إضافة مسمى</a>
 </div>
-<br>
-<hr>
 
-@php
-    $userRole = session('user_role');
-    $userId = session('user_id');
-@endphp
-
-@foreach($jobTitles as $jobTitle)
-    @if($userRole === 'admin' || ($userRole === 'user' && $jobTitle->user_id == $userId))
-        <div class="row">
-            <div class="col-xl-6 p-2">
-                <div class="card flat c-white f-forth text-center">
-                    <div class="card-header">
-                        Job Title
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{ $jobTitle->title }}</h5>
-                        <p class="card-text">{{ $jobTitle->description }}</p>
-                        <a href="#" class="btn text-center f-white">more Information</a>
-                    </div>
-                    <div class="card-footer text-muted c-white">
-                        {{ $jobTitle->created_at->diffForHumans() }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
-@endforeach 
-
+<div class="apanel">
+    <div class="table-responsive">
+        <table class="atable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>المسمى الوظيفي</th>
+                    <th>الوصف</th>
+                    <th>صاحبه</th>
+                    <th>الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($jobTitles as $jobTitle)
+                    <tr>
+                        <td>{{ $jobTitle->id }}</td>
+                        <td style="font-weight:bold;color:#2d114e;">{{ $jobTitle->title }}</td>
+                        <td>{{ \Illuminate\Support\Str::limit($jobTitle->description, 60) }}</td>
+                        <td>{{ optional(\App\Models\User::find($jobTitle->user_id))->name ?? '#' . $jobTitle->user_id }}</td>
+                        <td>
+                            <div class="d-flex" style="gap:.4rem;">
+                                <a href="{{ route('admin.jobsTitle.edit', $jobTitle->id) }}" class="abtn-edit" title="تعديل"><i class="fas fa-pen"></i></a>
+                                <form action="{{ route('admin.jobsTitle.delete', $jobTitle->id) }}" method="POST" onsubmit="return confirm('هل أنت متأكد من الحذف؟')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="abtn-del" title="حذف"><i class="fas fa-trash"></i></button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                @empty
+                    <tr><td colspan="5"><div class="aempty"><i class="fas fa-briefcase"></i><p class="mt-2">لا توجد مسميات وظيفية.</p></div></td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
 @endsection
