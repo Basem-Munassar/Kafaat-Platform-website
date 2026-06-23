@@ -1,127 +1,76 @@
 @extends('admin.layout.masterApp')
-<!-- content -->
-<!-- breadcrumb -->
+
+@section('pageTitle', isset($project) ? 'تعديل مشروع' : 'إضافة مشروع')
+@section('pageDescription', 'إدارة مشاريع السير الذاتية')
+
 @section('addAndEditProject')
-    <!-- content -->
-    <div class="row">
-        <div class="page-header breadcrumb-header p-3 mr-2 ml-2 m-2">
-            <div class="row align-items-end ">
-                <div class="col-lg-8">
-                    <div class="page-header-title text-left-rtl">
-                        <div class="d-inline">
-                            <h3 class="lite-text ">{{ isset($project) ? 'Edit Project' : 'New Project' }}</h3>
-                            <span class="lite-text text-gray">{{ isset($project) ? 'Edit your project details' : 'Add New Project to your CV' }}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item "><a href="#"><i class="fas fa-home"></i></a></li>
-                        <li class="breadcrumb-item "><a href="#">Component</a></li>
-                        <li class="breadcrumb-item active">Project</li>
-                    </ol>
-                </div>
+@php $userOptions = $users ?? \App\Models\User::orderBy('name')->get(); @endphp
+<div class="apage-head">
+    <h4 class="apage-title"><i class="fas fa-diagram-project mr-2"></i>{{ isset($project) ? 'تعديل مشروع' : 'إضافة مشروع جديد' }}</h4>
+    <a href="{{ route('admin.projects.index') }}" class="abtn-cancel" style="text-decoration:none;"><i class="fas fa-arrow-right"></i> رجوع</a>
+</div>
+
+<div class="aform-card">
+    <form action="{{ isset($project) ? route('admin.projects.update', $project->id) : route('admin.projects.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        @isset($project) @method('PUT') @endisset
+
+        @if ($errors->any())
+            <div class="alert alert-danger" style="border-radius:10px;">
+                <ul class="mb-0">@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
+            </div>
+        @endif
+
+        <div class="text-center mb-4">
+            <img id="projPreview" src="{{ isset($project) && $project->image ? asset('storage/' . $project->image) : asset('admin/img/user-profile.jpg') }}"
+                 style="width:100%;max-width:280px;border-radius:12px;object-fit:cover;">
+            <div class="mt-2">
+                <label class="abtn-cancel" style="cursor:pointer;">
+                    <i class="fas fa-image"></i> صورة المشروع
+                    <input type="file" name="image" accept="image/*" hidden onchange="document.getElementById('projPreview').src=window.URL.createObjectURL(this.files[0])">
+                </label>
             </div>
         </div>
-    </div>
-    <div class="jumbotron shade pt-5">
-        <h1>{{ isset($project) ? 'Edit Project' : 'New Project' }}</h1>
-        <!-- form -->
-        <div class="row ">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">                
-                <hr class="mt-0 mb-4">
-                <form action="{{ isset($project) ? route('projects.update', $project->id) : route('projects.store') }}" method="POST" class="p-2" enctype="multipart/form-data">
-                    @csrf
-                    @if(isset($project))
-                        @method('PUT')
-                    @endif
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-                    <input type="hidden" name="user_id" value="{{ session('user_id') ?? auth()->id() }}">
 
-                    <h4 class="c-grey  pt-3 pb-3">Project Image</h4>
-                    <hr class="mt-0 mb-4">
-                    <div class="custom-file">
-                        <input type="file" name="image" class="custom-file-input" id="customFile">
-                        <label class="custom-file-label" for="customFile">Choose image</label>
-                    </div>
-                    @error('image')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                
-                    <br class="mt-0 mb-4">
-                    <br class="mt-0 mb-4">
-
-                    <div class="form-group">
-                        <label for="ProjectTitle">Project Title</label>
-                        <input type="text" name="title" class="form-control" id="ProjectTitle"
-                            placeholder="website project" value="{{ old('title', $project->title ?? '') }}">
-                    </div>
-                    @error('title')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                
-                    <br class="mt-0 mb-4">
-
-                    <div class="form-group">
-                        <label for="date">Project Date</label>
-                        <input type="date" name="date" class="form-control" id="date"
-                            placeholder="website project" value="{{ old('date', $project->date ?? '') }}">
-                    </div>
-                    @error('date')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                
-                    <br class="mt-0 mb-4">
-
-                    <div class="form-group">
-                        <label for="technologies">Technologies</label>
-                        <select class="form-control" name="technologies" id="technologies">
-                            <option value="">Select one</option>
-                            <option value="1" {{ old('technologies', $project->technologies ?? '') == '1' ? 'selected' : '' }}>1</option>
-                            <option value="2" {{ old('technologies', $project->technologies ?? '') == '2' ? 'selected' : '' }}>2</option>
-                            <option value="3" {{ old('technologies', $project->technologies ?? '') == '3' ? 'selected' : '' }}>3</option>
-                            <option value="4" {{ old('technologies', $project->technologies ?? '') == '4' ? 'selected' : '' }}>4</option>
-                            <option value="5" {{ old('technologies', $project->technologies ?? '') == '5' ? 'selected' : '' }}>5</option>
-                        </select>
-                    </div>
-                    @error('technologies')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                
-                    <br class="mt-0 mb-4">
-                    <div class="form-group">
-                        <label for="linkProject">Link of the Project</label>
-                        <input type="text" name="link" class="form-control" id="linkProject"
-                            placeholder="website project" value="{{ old('link', $project->link ?? '') }}">
-                    </div>
-                    @error('link')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                
-                    <br class="mt-0 mb-4">
-                    <div class="form-group">
-                        <label for="description">Description</label>
-                        <textarea class="form-control" name="description" id="description" rows="3">{{ old('description', $project->description ?? '') }}</textarea>
-                    </div>
-                    @error('description')
-                        <small class="text-danger">{{ $message }}</small>
-                    @enderror
-                
-                    <div class="c-grey text-center col-3 ">
-                        <button type="submit" class="btn flat f-first btn-block fnt-xxs ">{{ isset($project) ? 'Update' : 'Add' }}</button>
-                    </div>
-                </form>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>صاحب المشروع</label>
+                <select name="user_id" class="form-control">
+                    @foreach ($userOptions as $u)
+                        <option value="{{ $u->id }}" {{ old('user_id', $project->user_id ?? '') == $u->id ? 'selected' : '' }}>{{ $u->name }} ({{ $u->email }})</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label>عنوان المشروع</label>
+                <input type="text" name="title" class="form-control" value="{{ old('title', $project->title ?? '') }}" placeholder="مثال: موقع شركة">
             </div>
         </div>
-    </div>
-    <!-- end of form -->
-    
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>التقنيات المستخدمة</label>
+                <input type="text" name="technologies" class="form-control" value="{{ old('technologies', $project->technologies ?? '') }}" placeholder="Laravel, Vue, MySQL">
+            </div>
+            <div class="form-group col-md-6">
+                <label>تاريخ المشروع</label>
+                <input type="date" name="date" class="form-control" value="{{ old('date', $project->date ?? '') }}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>رابط المشروع</label>
+            <input type="url" name="link" class="form-control" value="{{ old('link', $project->link ?? '') }}" placeholder="https://example.com">
+        </div>
+
+        <div class="form-group">
+            <label>الوصف</label>
+            <textarea name="description" class="form-control" rows="4" placeholder="وصف المشروع">{{ old('description', $project->description ?? '') }}</textarea>
+        </div>
+
+        <div class="text-left mt-3">
+            <button type="submit" class="abtn-save"><i class="fas fa-save"></i> {{ isset($project) ? 'حفظ التعديلات' : 'إضافة المشروع' }}</button>
+        </div>
+    </form>
+</div>
 @endsection

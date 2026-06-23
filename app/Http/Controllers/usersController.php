@@ -17,23 +17,26 @@ class usersController extends Controller
     
     public function store(Request $request)
     {
-        $validated =$request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            // 'role' => 'required|string|in:admin,user',
+            'role' => 'required|in:user,admin,super admin',
+            'account_type' => 'required|in:user,kafaa,employee',
             'bio' => 'nullable|string|max:1000',
             'phone' => 'nullable|string|max:20',
             'location' => 'nullable|string|max:255',
-        ]); 
-        
+        ]);
+
+        $validated['password'] = bcrypt($validated['password']);
+
         if($request->hasFile('profile_image')){
             $imagePath = $request->file('profile_image')->store('users', 'public');
             $validated['profile_image'] = $imagePath;
         }
-        $users = User::create($validated);
-        return redirect()->route('admin.users.index')->with('success', 'User added successfully');
+        User::create($validated);
+        return redirect()->route('admin.users.index')->with('success', 'تم إضافة المستخدم بنجاح');
     }
     public function destroy(int $id)
     {
@@ -61,6 +64,8 @@ class usersController extends Controller
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'email' => 'required|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
+            'role' => 'required|in:user,admin,super admin',
+            'account_type' => 'required|in:user,kafaa,employee',
             'bio' => 'nullable|string|max:1000',
             'phone' => 'nullable|string|max:20',
             'location' => 'nullable|string|max:255',
@@ -71,7 +76,13 @@ class usersController extends Controller
             $validated['profile_image'] = $imagePath;
         }
 
+        if (empty($validated['password'])) {
+            unset($validated['password']);
+        } else {
+            $validated['password'] = bcrypt($validated['password']);
+        }
+
         $user->update($validated);
-        return redirect()->route('admin.users.index')->with('success', 'User updated successfully');
+        return redirect()->route('admin.users.index')->with('success', 'تم تحديث المستخدم بنجاح');
     }
 }
