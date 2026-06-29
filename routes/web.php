@@ -17,6 +17,7 @@ use App\Http\Controllers\KafaaController;
 use App\Http\Controllers\usersController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\CvShareController;
 
 use Illuminate\Auth\Middleware\Authenticate;
 use App\Models\User;
@@ -46,6 +47,9 @@ Route::get('/services/{id}', [KafaaController::class, 'services'])->name('kafaa.
 Route::get('/skills/{id}', [KafaaController::class, 'skills'])->name('kafaa.skills');
 Route::get('/subscribe/{id}', [KafaaController::class, 'subscribe'])->name('kafaa.subscribe');
 Route::get('/projects/{id}', [KafaaController::class, 'projects'])->name('kafaa.projects');
+
+// Public temporary CV share link (no navbar, Kafaat logo only)
+Route::get('/cv/{token}', [CvShareController::class, 'show'])->name('cv.share.view');
 
 // Auth Routes
 Route::get('/login', [authController::class, 'login'])->name('login');
@@ -146,6 +150,13 @@ Route::middleware([Authenticate::class, 'role:kafaa,employee'])->prefix('kafaa')
     // Profile
     Route::get('/profile/edit', [dashboardController::class, 'editProfile'])->name('profile.edit');
     Route::put('/profile/update', [dashboardController::class, 'updateProfile'])->name('profile.update');
+
+    // CV Share Links
+    Route::prefix('share-links')->name('shareLinks.')->group(function () {
+        Route::get('/', [CvShareController::class, 'index'])->name('index');
+        Route::post('/', [CvShareController::class, 'store'])->name('store');
+        Route::delete('/{id}', [CvShareController::class, 'destroy'])->name('delete');
+    });
 
     // Experiences CRUD
     Route::prefix('experiences')->name('experiences.')->group(function () {

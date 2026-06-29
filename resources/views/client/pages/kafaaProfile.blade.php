@@ -1,4 +1,4 @@
-@extends('client.layout.expertMasterApp')
+@extends($cvLayout ?? 'client.layout.expertMasterApp')
 
 @section('Home')
 <!--============ start home =================-->

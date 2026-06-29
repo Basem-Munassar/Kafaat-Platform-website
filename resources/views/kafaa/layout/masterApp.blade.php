@@ -140,6 +140,9 @@
                         <li class="side-item {{ request()->routeIs('kafaa.profile.*') ? 'selected' : '' }}">
                             <a href="{{ route('kafaa.profile.edit') }}"><i class="fas fa-angle-right mr-2"></i>ملفي الشخصي</a>
                         </li>
+                        <li class="side-item {{ request()->routeIs('kafaa.shareLinks.*') ? 'selected' : '' }}">
+                            <a href="{{ route('kafaa.shareLinks.index') }}"><i class="fas fa-angle-right mr-2"></i>مشاركة سيرتي</a>
+                        </li>
                     </div>
                 </ul>
             </div>
@@ -165,6 +168,7 @@
                 <!-- content -->
                  @yield('dashboardContent')
                  @yield('profileContent')
+                 @yield('shareLinks')
                  @yield('projects')
                  @yield('addAndEditProject')
                  @yield('skills')
