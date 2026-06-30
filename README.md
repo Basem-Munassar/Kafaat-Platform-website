@@ -238,6 +238,6 @@ POST /kafaa/toggle-availability
 
 <div align="center">
 
-صُنع بـ ❤️ باستخدام Laravel — **منصة كفاءات**
+© جميع الحقوق محفوظة للمهندس **باسم عبدالرحمن صالح منصر**
 
 </div>
